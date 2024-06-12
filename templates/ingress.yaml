@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-api-ingress
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: ingress
+  annotations:
+    {{- with .Values.ingress }}
+    cert-manager.io/cluster-issuer: {{ .clasteIssuareName }}
+    nginx.ingress.kubernetes.io/rewrite-target: "{{ .target }}$2"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - {{ .hostname }}
+    secretName: {{ .tlsSercret }}
+  rules:
+  - host: {{ .hostname }}
+    http:
+      paths:
+      - path: {{ .ingressPath }}(|$)(.*)
+        pathType: {{ .pathType }}
+    {{- end }}
+        backend:
+          service:
+            name: {{ .Release.Name }}-api
+            port:
+              number: {{ .Values.canary.servicePort }}

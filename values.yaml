@@ -1,0 +1,38 @@
+# Deployment configurations  
+stable:
+  replicas: 2
+  version: v1
+  containerSpecImagePullPolicy: Always
+  containerName: case-study-canary
+  image: nginx
+  imageTag: latest
+  resources:
+    requestsMemory: 50Mi
+    requestsCpu: 50m
+    limitsMemory: 90Mi
+    limitsCpu: 100m
+  port: 80
+
+# Canary roll out policy
+canary:
+  timeBeforeRollBack: 60
+  servicePort: 80
+  interval: 15s
+  maxFailed: 5
+  maxTraficRouted: 50
+  stepWeight: 25
+  minRequestsSuccessRate: 90
+  cheakIntervall: 2m
+
+# Specify ingress configuration for targets and path
+ingress:
+  target: /
+  ingressPath: /
+  pathType: ImplementationSpecific
+  clasteIssuareName: "letsencrypt-prod"
+  hostname: bestrong.eastus.cloudapp.azure.com
+  tlsSercret: Secret-name
+clusterIssuer:
+  email: vitalikstelmah60@gmail.com
+  server: "https://acme-v02.api.letsencrypt.org/directory"
+  privateKeySecretName: "letsencrypt-prod-key"

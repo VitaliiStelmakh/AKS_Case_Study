@@ -1,0 +1,31 @@
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: {{ .Release.Name }}-сanary
+  namespace: {{ .Release.Namespace }}
+spec:
+  provider: nginx
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Release.Name }}-сanary
+  ingressRef:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    name: {{ .Release.Name }}-сanary-ingress
+  progressDeadlineSeconds: {{ .Values.canary.timeBeforeRollBack }}
+  service:
+    port: {{ .Values.canary.servicePort }}
+    targetPort: {{ .Values.stable.port }}
+{{- with .Values.canary }}
+  analysis:
+    interval: {{ .interval }}
+    threshold: {{ .maxFailed }}
+    maxWeight: {{ .maxTraficRouted }}
+    stepWeight: {{ .stepWeight }}
+    metrics:
+    - name: request-success-rate
+      thresholdRange:
+        min: {{ .minRequestsSuccessRate }}
+      interval: {{.cheakIntervall }}
+{{- end }}
