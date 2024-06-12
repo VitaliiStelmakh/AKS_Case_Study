@@ -30,8 +30,8 @@ ingress:
   ingressPath: /
   pathType: ImplementationSpecific
   clasteIssuareName: "letsencrypt-prod"
-  hostname: bestrong.eastus.cloudapp.azure.com
-  tlsSercret: Secret-name
+  hostname: casestudy.polandcentral.cloudapp.azure.com
+  tlsSercret: secretname
 clusterIssuer:
   email: vitalikstelmah60@gmail.com
   server: "https://acme-v02.api.letsencrypt.org/directory"

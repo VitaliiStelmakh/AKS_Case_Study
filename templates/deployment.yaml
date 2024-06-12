@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-api
+  name: {{ .Release.Name }}-canary
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Release.Name }}-api
+    app: {{ .Release.Name }}-canary
     version: {{ .Values.stable.version }}
 spec:
   replicas: {{ .Values.stable.replicas }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-api
+      app: {{ .Release.Name }}-canary
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-api
+        app: {{ .Release.Name }}-canary
     spec:
     {{-  with .Values.stable }}
       containers:
