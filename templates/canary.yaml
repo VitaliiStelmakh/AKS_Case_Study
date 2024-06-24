@@ -1,14 +1,14 @@
 apiVersion: flagger.app/v1beta1
 kind: Canary
 metadata:
-  name: {{ .Release.Name }}-canary
+  name: {{ .Release.Name }}-frontend
   namespace: {{ .Release.Namespace }}
 spec:
   provider: nginx
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ .Release.Name }}-canary
+    name: {{ .Release.Name }}-frontend
   ingressRef:
     apiVersion: networking.k8s.io/v1
     kind: Ingress
@@ -16,7 +16,7 @@ spec:
   progressDeadlineSeconds: {{ .Values.canary.timeBeforeRollBack }}
   service:
     port: {{ .Values.canary.servicePort }}
-    targetPort: {{ .Values.stable.port }}
+    targetPort: {{ .Values.stable.portFrontend }}
 {{- with .Values.canary }}
   analysis:
     interval: {{ .interval }}

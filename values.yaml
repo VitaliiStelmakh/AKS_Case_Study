@@ -3,15 +3,24 @@ stable:
   replicas: 2
   version: v1
   containerSpecImagePullPolicy: Always
-  containerName: case-study-canary
-  image: nginx
-  imageTag: latest
-  resources:
+  containerNameFrontend: case-study-canary-frontend
+  containerNameBackend: case-study-canary-api
+  imageFrontend: httpd
+  imageBackend: httpd
+  imageTagFrontend: latest
+  imageTagBackend: latest
+  resourcesFrontend:
     requestsMemory: 50Mi
     requestsCpu: 50m
     limitsMemory: 90Mi
     limitsCpu: 100m
-  port: 80
+  resourcesBackend:
+    requestsMemory: 50Mi
+    requestsCpu: 50m
+    limitsMemory: 90Mi
+    limitsCpu: 100m
+  portFrontend: 80
+  portBackend: 8080
 
 # Canary roll out policy
 canary:
@@ -19,7 +28,7 @@ canary:
   servicePort: 80
   interval: 15s
   maxFailed: 5
-  maxTraficRouted: 50
+  maxTraficRouted: 75
   stepWeight: 25
   minRequestsSuccessRate: 90
   cheakIntervall: 2m
@@ -30,7 +39,7 @@ ingress:
   ingressPath: /
   pathType: ImplementationSpecific
   clasteIssuareName: "letsencrypt-prod"
-  hostname: casestudy.polandcentral.cloudapp.azure.com
+  hostname: test.loc #casestudy.polandcentral.cloudapp.azure.com
   tlsSercret: secretname
 clusterIssuer:
   email: vitalikstelmah60@gmail.com

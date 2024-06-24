@@ -8,7 +8,6 @@ metadata:
   annotations:
     {{- with .Values.ingress }}
     cert-manager.io/cluster-issuer: {{ .clasteIssuareName }}
-    nginx.ingress.kubernetes.io/rewrite-target: "{{ .target }}$2"
 spec:
   ingressClassName: nginx
   tls:
@@ -19,11 +18,11 @@ spec:
   - host: {{ .hostname }}
     http:
       paths:
-      - path: {{ .ingressPath }}(|$)(.*)
+      - path: {{ .ingressPath }}
         pathType: {{ .pathType }}
     {{- end }}
         backend:
           service:
-            name: {{ .Release.Name }}-canary
+            name: {{ .Release.Name }}-frontend
             port:
               number: {{ .Values.canary.servicePort }}
