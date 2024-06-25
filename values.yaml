@@ -5,8 +5,8 @@ stable:
   containerSpecImagePullPolicy: Always
   containerNameFrontend: case-study-canary-frontend
   containerNameBackend: case-study-canary-api
-  imageFrontend: nginx
-  imageBackend: nignx
+  imageFrontend: case-study-canary-frontend
+  imageBackend: case-study-canary-api
   imageTag: latest
   resourcesFrontend:
     requestsMemory: 50Mi
