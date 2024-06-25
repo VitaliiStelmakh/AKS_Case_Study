@@ -25,4 +25,7 @@
 */temp*
 */*/temp*
 temp?
-app
+# Project spefific files
+app/
+.gitignore
+.github/

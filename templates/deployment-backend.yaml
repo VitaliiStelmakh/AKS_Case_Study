@@ -31,7 +31,7 @@ spec:
     {{-  with .Values.stable }}
       containers:
       - name: {{ .containerNameBackend }}
-        image: "{{ .imageBackend }}:{{ .imageTagBackend }}"
+        image: "{{ .imageBackend }}:{{ .imageTag }}"
         imagePullPolicy: {{ .containerSpecImagePullPolicy }}
         resources:
           requests:

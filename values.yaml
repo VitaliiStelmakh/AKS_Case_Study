@@ -1,14 +1,13 @@
 # Deployment configurations  
 stable:
-  replicas: 2
+  replicas: 1
   version: v1
   containerSpecImagePullPolicy: Always
   containerNameFrontend: case-study-canary-frontend
   containerNameBackend: case-study-canary-api
-  imageFrontend: httpd
-  imageBackend: httpd
-  imageTagFrontend: latest
-  imageTagBackend: latest
+  imageFrontend: nginx
+  imageBackend: nignx
+  imageTag: latest
   resourcesFrontend:
     requestsMemory: 50Mi
     requestsCpu: 50m
@@ -39,7 +38,7 @@ ingress:
   ingressPath: /
   pathType: ImplementationSpecific
   clasteIssuareName: "letsencrypt-prod"
-  hostname: test.loc #casestudy.polandcentral.cloudapp.azure.com
+  hostname: casestudy.polandcentral.cloudapp.azure.com #test.loc #casestudy.polandcentral.cloudapp.azure.com
   tlsSercret: secretname
 clusterIssuer:
   email: vitalikstelmah60@gmail.com

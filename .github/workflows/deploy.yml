@@ -1,0 +1,80 @@
+name: Build_and_deploy_to_AKS
+on:
+  push:
+    branches:
+      - main
+
+env:
+  RESOURCE_GROUP: Vitalii_Maksym_Canary
+  CLUSTER_NAME: Canary
+
+jobs:
+  build_and_push_docker_images:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@main
+
+    # Build docker images and push to ACR
+    - run: cd ./app/frontend 
+    - name: Build and push frontend image
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - run: |
+        docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/case-study-canary-frontend:${{ github.sha }}
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/case-study-canary-frontend:${{ github.sha }}
+
+    - run: cd ../api 
+    - name: Build and push api image
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - run: |
+        docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/case-study-canary-api:${{ github.sha }}
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/case-study-canary-api:${{ github.sha }}
+
+  deploy:
+    needs: [build_and_push_docker_images]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@main
+
+      - name: Azure login
+        uses: azure/login@v1.4.6
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Get K8s context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ env.RESOURCE_GROUP }}
+          cluster-name: ${{ env.CLUSTER_NAME }}
+          admin: 'false'
+          use-kubelogin: 'true'
+
+      - name: Bake deployment
+        uses: azure/k8s-bake@v2
+        with:
+          renderEngine: "helm"
+          helmChart: .
+          overrideFiles: values.yaml
+          overrides: |
+            replicas:2
+            imageTag:${{ github.sha }}
+          releaseName: "Canary-case-study"
+          helm-version: "latest"
+        id: bake
+
+      # Deploys application based on manifest files from previous step
+      - name: Deploy application
+        uses: Azure/k8s-deploy@v4
+        with:
+          action: deploy
+          manifests: ${{ steps.bake.outputs.manifestsBundle }}
+
