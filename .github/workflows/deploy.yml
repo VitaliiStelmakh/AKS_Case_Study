@@ -15,28 +15,25 @@ jobs:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@main
 
-    # Build docker images and push to ACR
-    - run: cd ./app/frontend 
-    - name: Build and push frontend image
+    - name: Login to ACR
       uses: azure/docker-login@v1
       with:
         login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
-    - run: |
+
+  # Build docker images and push to ACR
+    - name: Build and push frontend image
+      working-directory: ./app/frontend
+      run: |
         docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/case-study-canary-frontend:${{ github.sha }}
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/case-study-canary-frontend:${{ github.sha }}
-
-    - run: cd ../api 
     - name: Build and push api image
-      uses: azure/docker-login@v1
-      with:
-        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-        username: ${{ secrets.REGISTRY_USERNAME }}
-        password: ${{ secrets.REGISTRY_PASSWORD }}
-    - run: |
+      working-directory: ./app/api
+      run: |
         docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/case-study-canary-api:${{ github.sha }}
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/case-study-canary-api:${{ github.sha }}
+
 
   deploy:
     needs: [build_and_push_docker_images]
