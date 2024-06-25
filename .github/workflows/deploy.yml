@@ -68,7 +68,7 @@ jobs:
           overrideFiles: values.yaml
           overrides: |
             stable.replicas: 2
-            stable.imageTag: ${{ github.sha }}
+            stable.imageTag:${{ github.sha }}
           releaseName: "canary-case-study"
           helm-version: "latest"
         id: bake
