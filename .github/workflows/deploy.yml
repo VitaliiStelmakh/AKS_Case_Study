@@ -69,7 +69,7 @@ jobs:
           overrides: |
             replicas:2
             imageTag:${{ github.sha }}
-          releaseName: "Canary-case-study"
+          releaseName: "canary-case-study"
           helm-version: "latest"
         id: bake
 
