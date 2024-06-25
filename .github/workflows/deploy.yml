@@ -67,8 +67,8 @@ jobs:
           helmChart: .
           overrideFiles: values.yaml
           overrides: |
-            replicas: 2
-            imageTag: ${{ github.sha }}
+            stable.replicas: 2
+            stable.imageTag: ${{ github.sha }}
           releaseName: "canary-case-study"
           helm-version: "latest"
         id: bake

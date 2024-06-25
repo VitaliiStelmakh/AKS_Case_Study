@@ -7,7 +7,7 @@ stable:
   containerNameBackend: case-study-canary-api
   imageFrontend: case-study-canary-frontend
   imageBackend: case-study-canary-api
-  # imageTag: latest
+  imageTag: latest
   resourcesFrontend:
     requestsMemory: 50Mi
     requestsCpu: 50m
