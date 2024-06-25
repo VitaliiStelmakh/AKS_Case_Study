@@ -31,7 +31,7 @@ spec:
     {{-  with .Values.stable }}
       containers:
       - name: {{ .containerNameBackend }}
-        image: "{{ .imageBackend }}:{{ .imageTag }}"
+        image: "casestudyaacr.azurecr.io/{{ .imageBackend }}:{{ .imageTag }}"
         imagePullPolicy: {{ .containerSpecImagePullPolicy }}
         resources:
           requests:
