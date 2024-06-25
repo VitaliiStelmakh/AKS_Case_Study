@@ -4,7 +4,7 @@ const path = require('path');
 
 const app = express();
 const port = 3000;
-const apiUrl = 'http://localhost:8080/'; 
+const apiUrl = 'http://backend-api/'; 
 
 app.use(express.static('public'));
 

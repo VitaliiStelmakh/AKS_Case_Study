@@ -18,7 +18,7 @@ stable:
     requestsCpu: 50m
     limitsMemory: 90Mi
     limitsCpu: 100m
-  portFrontend: 80
+  portFrontend: 3000
   portBackend: 8080
 
 # Canary roll out policy
