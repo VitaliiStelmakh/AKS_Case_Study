@@ -11,7 +11,9 @@ app.use(express.static('public'));
 app.get('/api-call', async (req, res) => {
     try {
         const response = await axios.get(apiUrl);
-        res.json(response.data);
+        const happyNumbers = response.data["Your happy numbers are"];
+        const formattedResponse = `Your happy numbers are: ${happyNumbers.join(', ')}`;
+        res.json({ message: formattedResponse });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
