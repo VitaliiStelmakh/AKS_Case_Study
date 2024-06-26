@@ -4,7 +4,7 @@ const path = require('path');
 
 const app = express();
 const port = 3000;
-const apiUrl = 'http://backend-api.default.svc.cluster.local/'; 
+const apiUrl = 'http://backend-api.default.svc.cluster.local:8080/'; 
 
 app.use(express.static('public'));
 

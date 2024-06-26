@@ -7,7 +7,7 @@ spec:
     app.kubernetes.io/name: {{ .Release.Name }}-backend
   ports:
     - protocol: TCP
-      port: 80
+      port: 8080
       targetPort: {{ .Values.stable.portBackend }}
 ---
 apiVersion: apps/v1
